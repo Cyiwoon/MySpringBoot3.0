@@ -2,6 +2,7 @@ package com.basic.myspringboot.service;
 
 
 import com.basic.myspringboot.dto.UserReqDTO;
+import com.basic.myspringboot.dto.UserReqForm;
 import com.basic.myspringboot.dto.UserResDTO;
 import com.basic.myspringboot.entity.User;
 import com.basic.myspringboot.exception.BusinessException;
@@ -66,6 +67,13 @@ public class UserService {
         //Dirty Checking 변경감지를 하므로 setter method만 호출해도 update query가 실행이 된다.
         existUser.setName(userReqDTO.getName());
         return modelMapper.map(existUser, UserResDTO.class);
+    }
+
+    public void updateUserForm(UserReqForm userReqForm){
+        User existUser = userRepository.findById(userReqForm.getId())
+                .orElseThrow(() ->
+                        new BusinessException(userReqForm.getId() + " User Not Found", HttpStatus.NOT_FOUND));
+        existUser.setName(userReqForm.getName());
     }
 
     public void deleteUser(Long id) {
