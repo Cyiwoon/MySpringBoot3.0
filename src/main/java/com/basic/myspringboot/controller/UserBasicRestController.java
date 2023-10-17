@@ -18,6 +18,7 @@ public class UserBasicRestController {
     @Autowired
     private UserRepository userRepository;
 
+    @ResponseBody
     @PostMapping
     public User create(@RequestBody User user) {
         return userRepository.save(user);
@@ -55,4 +56,15 @@ public class UserBasicRestController {
         return ResponseEntity.ok(id+" User가 삭제되었습니다!");
     }
 
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody User userDetail) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("User Not Found", HttpStatus.NOT_FOUND));
+
+        //수정하려는 값을 저장
+        user.setName(userDetail.getName());
+        user.setEmail(userDetail.getEmail());
+        User updatedUser = userRepository.save(user);
+        return updatedUser;
+    }
 }
