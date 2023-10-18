@@ -5,6 +5,7 @@ import com.basic.myspringboot.dto.UserResDTO;
 import com.basic.myspringboot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,11 +28,13 @@ public class UserRestController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public UserResDTO getUserByID(@PathVariable Long id){
         return userService.getUserById(id);
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<UserResDTO> getUsers(){
         return userService.getUsers();
     }
